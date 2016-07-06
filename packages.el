@@ -30,11 +30,29 @@
 ;; For more info on `use-package', see readme:
 ;; https://github.com/jwiegley/use-package
 
+(defun setup-coq-keys-for-map (statemap)
+  (define-key statemap (kbd "<f3>") 'proof-assert-next-command-interactive)
+  (define-key statemap (kbd "<f4>") 'company-coq-proof-goto-point)
+  (define-key statemap (kbd "<f2>") 'proof-undo-last-successful-command))
+
+(defun setup-coq-keys ()
+  (setup-coq-keys-for-map evil-normal-state-map)
+  (setup-coq-keys-for-map evil-insert-state-map))
+
+(defun hide-mode-statuses ()
+  (diminish 'company-mode)
+  (diminish 'yas-minor-mode)
+  (diminish 'hs-minor-mode)
+  (diminish 'outline-minor-mode)
+  (diminish 'company-mode)
+  (diminish 'holes-mode))
+
 (defun coq/init-company-coq ()
   (use-package company-coq
-    :defer t
     :config
-    (add-hook 'coq-mode-hook #'company-coq-mode)))
+    (add-hook 'coq-mode-hook #'company-coq-mode)
+    (add-hook 'coq-mode-hook 'setup-coq-keys)
+    (add-hook 'coq-mode-hook 'hide-mode-statuses)))
 
 (defun coq/init-proof-general ()
   "Initialize Proof General"
@@ -42,7 +60,7 @@
     :defer t
     :mode ("\\.v\\'" . coq-mode)
     :load-path
-    "/usr/local/Cellar/proof-general/4.2/share/emacs/site-lisp/proof-general/generic")
+    "/usr/local/Cellar/proof-general/HEAD/share/emacs/site-lisp/proof-general/generic")
   :config (progn
             (spacemacs/set-leader-keys-for-major-mode 'coq-mode
               "]" 'proof-assert-next-command-interactive
