@@ -49,22 +49,18 @@
 
 (defun coq/init-company-coq ()
   (use-package company-coq
-    :config
+    :defer t
+    :init
     (add-hook 'coq-mode-hook #'company-coq-mode)
     (add-hook 'coq-mode-hook 'setup-coq-keys)
     (add-hook 'coq-mode-hook 'hide-mode-statuses)))
 
 (defun coq/init-proof-general ()
-  "Initialize Proof General"
-  (use-package proof-site
-    :defer t
-    :mode ("\\.v\\'" . coq-mode)
-    :load-path
-    "/usr/local/Cellar/proof-general/HEAD/share/emacs/site-lisp/proof-general/generic")
-  :config (progn
-            (spacemacs/set-leader-keys-for-major-mode 'coq-mode
-              "]" 'proof-assert-next-command-interactive
-              "[" 'proof-undo-last-successful-command
-              "." 'proof-goto-point
-              ))
-  )
+  "Initialize Proof General."
+  ;; Setup from Proof General README, using a Homebrew path. Proof General
+  ;; lazily loads from proof-site, so there's no need to use-package it.
+  (load "/usr/local/share/emacs/site-lisp/proof-general/generic/proof-site")
+  (spacemacs/set-leader-keys-for-major-mode 'coq-mode
+    "]" 'proof-assert-next-command-interactive
+    "[" 'proof-undo-last-successful-command
+    "." 'proof-goto-point))
