@@ -55,8 +55,8 @@
     :defer t
     :init
     (add-hook 'coq-mode-hook #'company-coq-mode)
-    (add-hook 'coq-mode-hook 'setup-coq-keys)
-    (add-hook 'coq-mode-hook 'hide-mode-statuses)))
+    (add-hook 'coq-mode-hook #'setup-coq-keys)
+    (add-hook 'coq-mode-hook #'hide-mode-statuses)))
 
 (defun coq/init-proof-general ()
   "Initialize Proof General."
