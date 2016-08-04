@@ -30,14 +30,17 @@
 ;; For more info on `use-package', see readme:
 ;; https://github.com/jwiegley/use-package
 
-(defun setup-coq-keys-for-map (statemap)
-  (define-key statemap (kbd "<f3>") 'proof-assert-next-command-interactive)
-  (define-key statemap (kbd "<f4>") 'company-coq-proof-goto-point)
-  (define-key statemap (kbd "<f2>") 'proof-undo-last-successful-command))
+(defun setup-coq-keys-for-map (state)
+  (evil-define-key state coq-mode-map
+    (kbd "<f3>") #'proof-assert-next-command-interactive)
+  (evil-define-key state coq-mode-map
+    (kbd "<f4>") #'company-coq-proof-goto-point)
+  (evil-define-key state coq-mode-map
+    (kbd "<f2>") #'proof-undo-last-successful-command))
 
 (defun setup-coq-keys ()
-  (setup-coq-keys-for-map evil-normal-state-map)
-  (setup-coq-keys-for-map evil-insert-state-map))
+  (setup-coq-keys-for-map 'normal)
+  (setup-coq-keys-for-map 'insert))
 
 (defun hide-mode-statuses ()
   (diminish 'company-mode)
