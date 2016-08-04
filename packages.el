@@ -66,4 +66,6 @@
   (spacemacs/set-leader-keys-for-major-mode 'coq-mode
     "]" 'proof-assert-next-command-interactive
     "[" 'proof-undo-last-successful-command
-    "." 'proof-goto-point))
+    "." 'proof-goto-point)
+  (setq evil-insert-state-cursor
+        (cons (car evil-normal-state-cursor) (cdr evil-insert-state-cursor))))
