@@ -69,3 +69,7 @@ Key Binding  | Description
 `M-S-RET`    | Insert `match goal with` branch
 
 Note the last two are regular company-coq bindings, left alone since they are most useful in insert mode.
+
+## Note about cursor color
+
+This package forces the insert mode cursor color to match normal mode, to avoid a serious performance problem in Evil where proof navigation in insert mode is extremely slow compared to the same commands in normal mode. See https://github.com/olivierverdier/spacemacs-coq/issues/6 for details.
