@@ -56,17 +56,55 @@
     :init
     (add-hook 'coq-mode-hook #'company-coq-mode)
     (add-hook 'coq-mode-hook #'setup-coq-keys)
-    (add-hook 'coq-mode-hook #'hide-mode-statuses)))
+    (add-hook 'coq-mode-hook #'hide-mode-statuses)
+    :config
+    (progn
+      (spacemacs/declare-prefix-for-mode
+       'coq-mode
+       "mi" "company-coq/insert")
+      (spacemacs/set-leader-keys-for-major-mode 'coq-mode
+        "il" 'company-coq-lemma-from-goal
+        "im" 'company-coq-insert-match-construct))))
 
 (defun coq/init-proof-general ()
   "Initialize Proof General."
   ;; Setup from Proof General README, using a Homebrew path. Proof General
   ;; lazily loads from proof-site, so there's no need to use-package it.
   (load "/usr/local/share/emacs/site-lisp/proof-general/generic/proof-site")
+  (dolist (prefix '(("ml" . "pg/layout")
+                    ("mp" . "pg/prover")
+                    ("ma" . "pg/ask-prover")
+                    ("mai" . "show-implicits")
+                    ("man" . "show-all") ; n is for notation
+                    ("mg" . "pg/goto")))
+    (spacemacs/declare-prefix-for-mode
+     'coq-mode
+     (car prefix) (cdr prefix)))
   (spacemacs/set-leader-keys-for-major-mode 'coq-mode
     "]" 'proof-assert-next-command-interactive
     "[" 'proof-undo-last-successful-command
-    "." 'proof-goto-point)
+    "." 'proof-goto-point
+    ;; Layout
+    "ll" 'proof-layout-windows
+    "lc" 'pg-response-clear-displays
+    "lp" 'proof-prf
+    ;; Prover Interaction
+    "px" 'proof-shell-exit
+    "pc" 'proof-interrupt-process
+    "pr" 'proof-retract-buffer
+    "af" 'proof-find-theorems
+    "ap" 'coq-Print
+    "ac" 'coq-Check
+    "ab" 'coq-About
+    "aip" 'coq-Print-with-implicits
+    "aic" 'coq-Check-show-implicits
+    "aib" 'coq-About-with-implicits
+    "anp" 'coq-Print-with-all
+    "anc" 'coq-Check-show-all
+    "anb" 'coq-About-with-all
+    "g." 'proof-goto-end-of-locked
+    "ga" 'proof-goto-command-start
+    "ge" 'proof-goto-command-end)
   (add-hook 'coq-mode-hook
             (lambda ()
               (setq-local
