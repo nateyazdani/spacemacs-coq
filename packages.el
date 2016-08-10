@@ -94,6 +94,11 @@
     "g." 'proof-goto-end-of-locked
     "ga" 'proof-goto-command-start
     "ge" 'proof-goto-command-end)
+  ;; Workaround for evil performance bug (see
+  ;; https://github.com/olivierverdier/spacemacs-coq/issues/6 for details).
+  ;; Essentially the cursor color is changed rapidly when navigating the proof
+  ;; in insert mode. This ensures the insert and normal mode colors are the
+  ;; same, which generally avoids this problem.
   (add-hook 'coq-mode-hook
             (lambda ()
               (setq-local
