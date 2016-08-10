@@ -4,7 +4,7 @@ Adds support for Coq via [Proof General](https://github.com/ProofGeneral/PG) and
 
 ## Installation
 
-To install, run `git clone https://github.com/tchajed/spacemacs-coq ~/.spacemacs/private/coq` and add `coq` to your `dotspacemacs-configuration-layers` list.
+To install, run `git clone https://github.com/tchajed/spacemacs-coq ~/.emacs.d/private/coq` and add `coq` to your `dotspacemacs-configuration-layers` list.
 
 ## Shortcuts
 
