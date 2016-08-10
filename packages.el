@@ -1,34 +1,23 @@
 ;;; packages.el --- coq Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
+;; Copyright (c) 2016 Tej Chajed
 ;;
-;; Author: Olivier Verdier <olivier.verdier@gmail.com>
-;; URL: https://github.com/olivierverdier/spacemacs-coq
+;; Based on original version by Olivier Verdier
+;;
+;; Author: Tej Chajed <tchajed@mit.edu>
+;; URL: https://github.com/tchajed/spacemacs-coq
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
 ;;; License: GPLv3
 
-;; List of all packages to install and/or initialize. Built-in packages
-;; which require an initialization must be listed explicitly in the list.
 (setq coq-packages
     '(
       company-coq
       (proof-general :location local)
       ))
 
-;; List of packages to exclude.
 (setq coq-excluded-packages '())
-
-;; For each package, define a function coq/init-<package-name>
-;;
-;; (defun coq/init-my-package ()
-;;   "Initialize my package"
-;;   )
-;;
-;; Often the body of an initialize function uses `use-package'
-;; For more info on `use-package', see readme:
-;; https://github.com/jwiegley/use-package
 
 (defun setup-coq-keys-for-map (state)
   (evil-define-key state coq-mode-map
@@ -44,7 +33,6 @@
 
 (defun hide-mode-statuses ()
   (diminish 'company-mode)
-  (diminish 'yas-minor-mode)
   (diminish 'hs-minor-mode)
   (diminish 'outline-minor-mode)
   (diminish 'company-mode)
@@ -57,14 +45,12 @@
     (add-hook 'coq-mode-hook #'company-coq-mode)
     (add-hook 'coq-mode-hook #'setup-coq-keys)
     (add-hook 'coq-mode-hook #'hide-mode-statuses)
-    :config
-    (progn
-      (spacemacs/declare-prefix-for-mode
-       'coq-mode
-       "mi" "company-coq/insert")
-      (spacemacs/set-leader-keys-for-major-mode 'coq-mode
-        "il" 'company-coq-lemma-from-goal
-        "im" 'company-coq-insert-match-construct))))
+    (spacemacs/declare-prefix-for-mode
+     'coq-mode
+     "mi" "company-coq/insert")
+    (spacemacs/set-leader-keys-for-major-mode 'coq-mode
+      "il" 'company-coq-lemma-from-goal
+      "im" 'company-coq-insert-match-construct)))
 
 (defun coq/init-proof-general ()
   "Initialize Proof General."
@@ -81,6 +67,7 @@
      'coq-mode
      (car prefix) (cdr prefix)))
   (spacemacs/set-leader-keys-for-major-mode 'coq-mode
+    ;; Basic proof management
     "]" 'proof-assert-next-command-interactive
     "[" 'proof-undo-last-successful-command
     "." 'proof-goto-point
@@ -92,6 +79,7 @@
     "px" 'proof-shell-exit
     "pc" 'proof-interrupt-process
     "pr" 'proof-retract-buffer
+    ;; Prover queries ('ask prover')
     "af" 'proof-find-theorems
     "ap" 'coq-Print
     "ac" 'coq-Check
@@ -102,6 +90,7 @@
     "anp" 'coq-Print-with-all
     "anc" 'coq-Check-show-all
     "anb" 'coq-About-with-all
+    ;; Moving the point (goto)
     "g." 'proof-goto-end-of-locked
     "ga" 'proof-goto-command-start
     "ge" 'proof-goto-command-end)
