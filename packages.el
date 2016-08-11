@@ -79,6 +79,7 @@
     "px" 'proof-shell-exit
     "pc" 'proof-interrupt-process
     "pr" 'proof-retract-buffer
+    "pb" 'proof-process-buffer
     ;; Prover queries ('ask prover')
     "af" 'proof-find-theorems
     "ap" 'coq-Print

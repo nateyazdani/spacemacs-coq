@@ -32,7 +32,8 @@ Key Binding  | Description
 -----------  | -----------
 `,pc`        | Interrupt prover
 `,px`        | Quit prover
-`,pr`        | Retract buffer
+`,pr`        | Retract buffer - rewinds and moves point to beginning of buffer
+`,pb`        | Process buffer - processes and moves point to end of buffer
 
 ### Prover queries
 
