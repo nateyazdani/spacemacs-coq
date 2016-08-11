@@ -47,7 +47,7 @@
     (add-hook 'coq-mode-hook #'hide-mode-statuses)
     (spacemacs/declare-prefix-for-mode
      'coq-mode
-     "mi" "company-coq/insert")
+     "mi" "coq/insert")
     (spacemacs/set-leader-keys-for-major-mode 'coq-mode
       "il" 'company-coq-lemma-from-goal
       "im" 'company-coq-insert-match-construct)))
@@ -93,7 +93,9 @@
     ;; Moving the point (goto)
     "g." 'proof-goto-end-of-locked
     "ga" 'proof-goto-command-start
-    "ge" 'proof-goto-command-end)
+    "ge" 'proof-goto-command-end
+    ;; Insertions
+    "ie" 'coq-end-Section)
   ;; Workaround for evil performance bug (see
   ;; https://github.com/olivierverdier/spacemacs-coq/issues/6 for details).
   ;; Essentially the cursor color is changed rapidly when navigating the proof

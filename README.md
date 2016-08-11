@@ -65,8 +65,11 @@ Key Binding  | Description
 -----------  | -----------
 `,il`        | Extract lemma from current goal - exit with `C-RET` (not `C-j`)
 `,im`        | Insert `match` on a type
+`,ie`        | Insert `End <section-name>`.
 `M-RET`      | Insert regular match branch
 `M-S-RET`    | Insert `match goal with` branch
+
+It's worth highlighting `,ie`, probably criminally underused due to the default binding of `C-c C-a C-)`.
 
 Note the last two are regular company-coq bindings, left alone since they are most useful in insert mode.
 
