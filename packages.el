@@ -14,7 +14,11 @@
 (setq coq-packages
     '(
       company-coq
-      (proof-general :location local)
+              (proof-general :location (recipe
+                                  :fetcher github
+                                  :repo "ProofGeneral/PG"
+                                  :files ("*")))
+
       ))
 
 (setq coq-excluded-packages '())
@@ -56,7 +60,19 @@
   "Initialize Proof General."
   ;; Setup from Proof General README, using a Homebrew path. Proof General
   ;; lazily loads from proof-site, so there's no need to use-package it.
-  (load "/usr/local/share/emacs/site-lisp/proof-general/generic/proof-site")
+  ;; (load "/usr/local/share/emacs/site-lisp/proof-general/generic/proof-site")
+    (use-package proof-site
+    :mode ("\\.v\\'" . coq-mode)
+    :defer t
+    :init
+    (progn
+      (setq coq/proof-general-load-path
+            (concat (configuration-layer/get-elpa-package-install-directory
+                     'proof-general) "generic")
+            proof-three-window-mode-policy 'hybrid
+            proof-script-fly-past-comments t
+            proof-splash-seen t)
+      (add-to-list 'load-path coq/proof-general-load-path))
   (dolist (prefix '(("ml" . "pg/layout")
                     ("mp" . "pg/prover")
                     ("ma" . "pg/ask-prover")
@@ -108,4 +124,4 @@
                evil-insert-state-cursor
                (cons
                 (car evil-normal-state-cursor)
-                (cdr evil-insert-state-cursor))))))
+                (cdr evil-insert-state-cursor)))))))
