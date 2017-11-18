@@ -124,4 +124,10 @@
                  evil-insert-state-cursor
                  (cons
                   (car evil-normal-state-cursor)
-                  (cdr evil-insert-state-cursor)))))))
+                  (cdr evil-insert-state-cursor)))))
+    (add-hook 'coq-mode-hook
+              (lambda ()
+                (purpose-add-user-purposes
+                 :modes
+                 '((proof-response-mode . response)
+                   (proof-goals-mode . goals)))))))
