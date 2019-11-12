@@ -1,79 +1,96 @@
-# Coq Spacemacs layer
+# Spacemacs layer for the Coq proof assistant
 
-Adds support for Coq via [Proof General](https://github.com/ProofGeneral/PG) and [company-coq](https://github.com/cpitclaudel/company-coq).
+A spacemacs layer providing Coq support by wrapping [Company Coq](https://github.com/cpitclaudel/company-coq), which builds upon [Proof General](https://github.com/ProofGeneral/PG).
 
-## Installation
-
-To install, run `git clone https://github.com/tchajed/spacemacs-coq ~/.emacs.d/private/coq` and add `coq` to your `dotspacemacs-configuration-layers` list.
+This spacemacs layer derives from the official layer under development, which in turn derives from [Olivier Verdier's layer](https://github.com/olivierverdier/spacemacs-coq) via [Tej Chajed's derivative](https://github.com/tchajed/spacemacs-coq). The biggest changes are to pull Proof General off MELPA through the `package.el` system (rather than expecting manual installation) and to remap the keybindings to my own preference.
 
 ## Shortcuts
 
-This layer adds Spacemacs-style shortcuts for the most useful parts of Proof General and company-coq's functionality.
+This layer adds Spacemacs-style shortcuts for the most heavily used functionality of Company Coq and Proof General
 
-### Proof management
+### Interacting with the proof
 
 Key Binding  | Description
 -----------  | -----------
-`<f4>`, `,.` | Go to point
-`<f3>`, `,]` | Process next command
-`<f2>`, `,[` | Undo previous command
+`,.`         | Go to point
+`,]`         | Process next command
+`,[`         | Undo previous command
+`,=`         | Evaluate selected term
 
 ### Laying out windows
 
 Key Binding  | Description
 -----------  | -----------
 `,ll`        | Re-layout windows
+`,lt`        | Toggle proof tree
+`,lr`        | Rotate output displays
 `,lc`        | Clear response buffer
-`,lp`        | Show current proof
+`,lp`        | Refresh current proof
 
-### Managing prover process
-
-Key Binding  | Description
------------  | -----------
-`,pc`        | Interrupt prover
-`,px`        | Quit prover
-`,pr`        | Retract buffer - rewinds and moves point to beginning of buffer
-`,pb`        | Process buffer - processes and moves point to end of buffer
-
-### Prover queries
-
-The mnemonic for `a` is "ask".
+### Managing the prover process
 
 Key Binding  | Description
 -----------  | -----------
-`,af`        | Search (mnemonic: "find theorems")
-`,ap`        | Print
-`,ac`        | Check
-`,ab`        | About
-`,aip`       | Print (showing implicits)
-`,aic`       | Check (showing implicits)
-`,aib`       | About (showing implicits)
-`,anp`       | Print (showing all; mnemonic for `n` is "notations")
-`,anc`       | Check (showing all; mnemonic for `n` is "notations")
-`,anb`       | About (showing all; mnemonic for `n` is "notations")
+`,pc`        | List current proof context
+`,ps`        | Toggle active scripting
+`,pb`        | Process buffer through to end
+`,pr`        | Retract buffer back to start
+`,pk`        | Interrupt prover
+`,pq`        | Quit prover
+
+### Searching the proof context
+
+Key Binding  | Description
+-----------  | -----------
+`,sa`        | Search constants by identifier/type fragment(s)
+`,sp`        | Search constants by type pattern
+`,sr`        | Search equality lemma for rewriting
+`,sl`        | Search qualified location of identifier
+`,sn`        | Search expanded template of notation
+
+### Inspecting the proof context
+
+Key Binding  | Description
+-----------  | -----------
+`,ip`        | Print body (optionally showing implicits)
+`,iP`        | Print body in full
+`,ic`, `,c`  | Check type (optionally showing implicits)
+`,iC`        | Check type in full
+`,ia`, `,a`  | About item (optionally showing implicits)
+`,iA`        | About item in full
+`,i!`        | Toggle showing implicit subterms
 
 ### Moving the point
 
 Key Binding  | Description
 -----------  | -----------
-`,g.`         | Go to last processed command
-`,ga`         | Go to start of command at point
-`,ge`         | Go to end of command at point
+`,g.`        | Go to last processed command
+`,g0`        | Go to start of command at point
+`,g$`        | Go to end of command at point
+`,gb`        | Go to previous command
+`,gw`        | Go to next command
 
-### Inserting
+### Manipulating the program text
 
 Key Binding  | Description
 -----------  | -----------
-`,il`        | Extract lemma from current goal - exit with `C-RET` (not `C-j`)
-`,im`        | Insert `match` on a type
-`,ie`        | Insert `End <section-name>`.
-`M-RET`      | Insert regular match branch
-`M-S-RET`    | Insert `match goal with` branch
+`,x-`        | Fold body of current proof or definition
+`,x+`        | Unfold body of current proof or definition
+`,x*`        | Peek definition of symbol at point
+`,x/`        | Grep throughout Coq sources in current directory tree
+`,xo`        | Show outline of current proof script
+`,xg`        | Go to position at point in proof outline
+`,xd`        | Compare unification errors or goal states
+`,xj`        | Jump to definition of identifier at point
 
-It's worth highlighting `,ie`, probably criminally underused due to the default binding of `C-c C-a C-)`.
+### Retrieving documentation
 
-Note the last two are regular company-coq bindings, left alone since they are most useful in insert mode.
+Key Binding  | Description
+-----------  | -----------
+`,d`         | View documentation of an identifier
 
-## Note about cursor color
+### Finding help
 
-This package forces the insert mode cursor color to match normal mode, to avoid a serious performance problem in Evil where proof navigation in insert mode is extremely slow compared to the same commands in normal mode. See https://github.com/olivierverdier/spacemacs-coq/issues/6 for details.
+Key Binding  | Description
+-----------  | -----------
+`,?`         | Show help for a Coq error message
