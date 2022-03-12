@@ -15,45 +15,54 @@
 ;;; License: GPLv3
 
 (setq coq-packages
-      '(
-        proof-general
-        company-coq
-        ))
+      '(proof-general
+        (company-coq :requires company)
+        smartparens
+        vi-tilde-fringe))
 
 (setq coq-excluded-packages '())
 
 (defvar coq/showing-implicits nil)
-
 (defun coq/init-company-coq ()
   "Initialize Company Coq upon entering coq-mode."
   (use-package company-coq
     :defer t
     :init
     (progn
-      (add-hook 'coq-mode-hook #'company-coq-mode)
+      (add-hook 'coq-mode-hook 'company-coq-mode)
+      (load "~/.emacs.d/private/coq/pg-undo-tree.el")
+      (add-to-list 'spacemacs-jump-handlers-coq-mode
+                   'company-coq-jump-to-definition)
       (setq company-coq-disabled-features '(hello keybindings snippets)))
     :config
     (progn
       (spacemacs/declare-prefix-for-mode 'coq-mode "mx" "source")
       (spacemacs/set-leader-keys-for-major-mode 'coq-mode
-        "." #'company-coq-proof-goto-point
-        "=" #'company-coq-eval-last-sexp
+        "." 'company-coq-proof-goto-point
+        "=" 'company-coq-eval-last-sexp
 
         ;; Source manipulation (text).
-        "x-" #'company-coq-fold
-        "x+" #'company-coq-unfold
-        "x*" #'company-coq-toggle-definition-overlay
-        "x/" #'company-coq-grep-symbol
-        "xo" #'company-coq-occur
-        "xg" #'company-coq-goto-occurence
-        "xd" #'company-coq-diff-dwim
-        "xj" #'company-coq-jump-to-definition
+        "x-" 'company-coq-fold
+        "x+" 'company-coq-unfold
+        "x*" 'company-coq-toggle-definition-overlay
+        "x/" 'company-coq-grep-symbol
+        "xo" 'company-coq-occur
+        "xg" 'company-coq-goto-occurence
+        "xd" 'company-coq-diff-dwim
+        "xj" 'company-coq-jump-to-definition
+
+        "il" 'company-coq-lemma-from-goal
+        "im" 'company-coq-insert-match-construct
+        "ao" 'company-coq-occur
+        "he" 'company-coq-document-error
+        "hE" 'company-coq-browse-error-messages
+        "hh" 'company-coq-doc
 
         ;; Documentation retrieval.
-        "d" #'company-coq-doc
+        "d" 'company-coq-doc
 
         ;; Prover help.
-        "?" #'company-coq-document-error
+        "?" 'company-coq-document-error
         ))))
 
 (defun coq/init-proof-general ()
@@ -76,19 +85,19 @@
     (progn
       (defun proof-search-location ()
         (interactive)
-        (funcall-interactively #'coq-LocateConstant))
+        (funcall-interactively 'coq-LocateConstant))
       (defun proof-search-notation ()
         (interactive)
-        (funcall-interactively #'coq-LocateNotation))
+        (funcall-interactively 'coq-LocateNotation))
       (defun proof-search-rewrite ()
         (interactive)
-        (funcall-interactively #'coq-SearchRewrite))
+        (funcall-interactively 'coq-SearchRewrite))
       (defun proof-search-about ()
         (interactive)
-        (funcall-interactively #'coq-SearchConstant))
+        (funcall-interactively 'coq-SearchConstant))
       (defun proof-search-pattern ()
         (interactive)
-        (funcall-interactively #'coq-SearchIsos))
+        (funcall-interactively 'coq-SearchIsos))
 
       (defun proof-toggle-showing-implicits ()
         (interactive)
@@ -97,28 +106,28 @@
       (defun proof-print ()
         (interactive)
         (if coq/showing-implicits
-            (funcall-interactively #'coq-Print)
-          (funcall-interactively #'coq-Print-with-implicits)))
+            (funcall-interactively 'coq-Print)
+          (funcall-interactively 'coq-Print-with-implicits)))
       (defun proof-check ()
         (interactive)
         (if coq/showing-implicits
-            (funcall-interactively #'coq-Check)
-          (funcall-interactively #'coq-Check-show-implicits)))
+            (funcall-interactively 'coq-Check)
+          (funcall-interactively 'coq-Check-show-implicits)))
       (defun proof-about ()
         (interactive)
         (if coq/showing-implicits
-            (funcall-interactively #'coq-About)
-          (funcall-interactively #'coq-About-with-implicits)))
+            (funcall-interactively 'coq-About)
+          (funcall-interactively 'coq-About-with-implicits)))
 
       (defun proof-print-full ()
         (interactive)
-        (funcall-interactively #'coq-Print-with-all))
+        (funcall-interactively 'coq-Print-with-all))
       (defun proof-check-full ()
         (interactive)
-        (funcall-interactively #'coq-Check-show-all))
+        (funcall-interactively 'coq-Check-show-all))
       (defun proof-about-full ()
         (interactive)
-        (funcall-interactively #'coq-About-with-all))
+        (funcall-interactively 'coq-About-with-all))
 
       (spacemacs/declare-prefix-for-mode 'coq-mode "ml" "layout")
       (spacemacs/declare-prefix-for-mode 'coq-mode "mp" "prover")
@@ -128,47 +137,55 @@
 
       (spacemacs/set-leader-keys-for-major-mode 'coq-mode
         ;; Prover interaction.
-        "]" #'proof-assert-next-command-interactive
-        "[" #'proof-undo-last-successful-command
-        "/" #'proof-find-theorems ; same as #'coq-SearchConstant
+        "]" 'proof-assert-next-command-interactive
+        "[" 'proof-undo-last-successful-command
+        "/" 'proof-find-theorems ; same as 'coq-SearchConstant
 
         ;; Window layout
-        "ll" #'proof-layout-windows
-        "lt" #'proof-tree-external-display-toggle
-        "lr" #'proof-display-some-buffers
-        "lc" #'pg-response-clear-displays
-        "lp" #'proof-prf
+        "ll" 'proof-layout-windows
+        "lt" 'proof-tree-external-display-toggle
+        "lr" 'proof-display-some-buffers
+        "lc" 'pg-response-clear-displays
+        "lp" 'proof-prf
 
         ;; Prover management.
-        "pc" #'proof-ctxt
-        "ps" #'proof-toggle-active-scripting
-        "pb" #'proof-process-buffer
-        "pr" #'proof-retract-buffer
-        "pk" #'proof-interrupt-process
-        "pq" #'proof-shell-exit
+        "pc" 'proof-ctxt
+        "ps" 'proof-toggle-active-scripting
+        "pb" 'proof-process-buffer
+        "pr" 'proof-retract-buffer
+        "pk" 'proof-interrupt-process
+        "pq" 'proof-shell-exit
 
         ;; Context search.
-        "sl" #'proof-search-location
-        "sn" #'proof-search-notation
-        "sr" #'proof-search-rewrite
-        "sp" #'proof-search-pattern
-        "sa" #'proof-search-about
+        "sl" 'proof-search-location
+        "sn" 'proof-search-notation
+        "sr" 'proof-search-rewrite
+        "sp" 'proof-search-pattern
+        "sa" 'proof-search-about
 
         ;; Context inspection.
-        "c" #'proof-check
-        "a" #'proof-about
-        "ip" #'proof-print
-        "iP" #'proof-print-full
-        "ic" #'proof-check
-        "iC" #'proof-check-full
-        "ia" #'proof-about
-        "iA" #'proof-about-full
-        "i!" #'proof-toggle-showing-implicits
+        "c" 'proof-check
+        "a" 'proof-about
+        "ip" 'proof-print
+        "iP" 'proof-print-full
+        "ic" 'proof-check
+        "iC" 'proof-check-full
+        "ia" 'proof-about
+        "iA" 'proof-about-full
+        "i!" 'proof-toggle-showing-implicits
 
         ;; Point motion (goto).
-        "g." #'proof-goto-end-of-locked
-        "g0" #'proof-goto-command-start
-        "g$" #'proof-goto-command-end
-        "gb" #'proof-backward-command
-        "gw" #'proof-forward-command
+        "g." 'proof-goto-end-of-locked
+        "g0" 'proof-goto-command-start
+        "g$" 'proof-goto-command-end
+        "gb" 'proof-backward-command
+        "gw" 'proof-forward-command
         ))))
+
+(defun coq/post-init-smartparens ()
+  (add-hook 'coq-mode-hook #'spacemacs//activate-smartparens))
+
+(defun coq/post-init-vi-tilde-fringe ()
+  (spacemacs/add-to-hooks 'spacemacs/disable-vi-tilde-fringe
+                          '(coq-response-mode-hook
+                            coq-goals-mode-hook)))
