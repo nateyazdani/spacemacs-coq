@@ -16,7 +16,7 @@
 
 (setq coq-packages
       '(proof-general
-        (company-coq :requires company)
+        company-coq
         smartparens
         vi-tilde-fringe))
 
@@ -29,8 +29,7 @@
     :defer t
     :init
     (progn
-      (add-hook 'coq-mode-hook 'company-coq-mode)
-      (load "~/.emacs.d/private/coq/pg-undo-tree.el")
+      (add-hook 'coq-mode-hook #'company-coq-mode)
       (add-to-list 'spacemacs-jump-handlers-coq-mode
                    'company-coq-jump-to-definition)
       (setq company-coq-disabled-features '(hello keybindings snippets)))
@@ -38,8 +37,8 @@
     (progn
       (spacemacs/declare-prefix-for-mode 'coq-mode "mx" "source")
       (spacemacs/set-leader-keys-for-major-mode 'coq-mode
-        "." 'company-coq-proof-goto-point
-        "=" 'company-coq-eval-last-sexp
+        "." 'proof-goto-point
+        ;"=" 'company-coq-eval-last-sexp
 
         ;; Source manipulation (text).
         "x-" 'company-coq-fold
@@ -50,10 +49,11 @@
         "xg" 'company-coq-goto-occurence
         "xd" 'company-coq-diff-dwim
         "xj" 'company-coq-jump-to-definition
+        "xs" 'company-coq-maybe-exit-snippet
 
         "il" 'company-coq-lemma-from-goal
         "im" 'company-coq-insert-match-construct
-        "ao" 'company-coq-occur
+        "go" 'company-coq-occur
         "he" 'company-coq-document-error
         "hE" 'company-coq-browse-error-messages
         "hh" 'company-coq-doc
@@ -76,6 +76,7 @@
                      'proof-general)
                     "generic"))
       (add-to-list 'load-path coq/proof-general-load-path)
+      (load "~/.emacs.d/private/coq/pg-undo-tree.el")
       (setq proof-three-window-mode-policy 'hybrid
             proof-keep-response-history t
             proof-output-tooltips t
